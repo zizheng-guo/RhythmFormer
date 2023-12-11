@@ -160,7 +160,7 @@ class PhysNet_padding_Encoder_Decoder_MAX(nn.Module):
         x = x.permute(0,2,1,3,4)
         x = x[:,:3,:,:,:]
         
-        # x = x[:,:,3:,:,:]
+        #w. fusion_stem (set the input as standardized data)
         # N, D, C, H, W = x.shape
         # x = self.fusion_stem(x)
         # x = x.view(N,D,32,H//2,W//2).permute(0,2,1,3,4)  # x [32, T, 64,64]

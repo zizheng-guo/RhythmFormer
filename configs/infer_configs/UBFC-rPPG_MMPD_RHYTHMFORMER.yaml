@@ -7,7 +7,7 @@ TRAIN:
   MODEL_FILE_NAME: UBFC_MMPD_RhythmFormer
   DATA:
     FS: 30
-    DATASET: UBFC
+    DATASET: UBFC-rPPG
     DO_PREPROCESS: False               # if first time, should be true
     DATA_FORMAT: NDCHW
     DATA_PATH: "../../../space/user/DataSet/UBFC/"          # Raw dataset path, need to be updated
@@ -34,7 +34,7 @@ TRAIN:
 VALID:
   DATA:
     FS: 30
-    DATASET: UBFC
+    DATASET: UBFC-rPPG
     DO_PREPROCESS: False                 # if first time, should be true
     DATA_FORMAT: NDCHW
     DATA_PATH: "../../../space/user/DataSet/UBFC/"          # Raw dataset path, need to be updated

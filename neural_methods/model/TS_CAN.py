@@ -185,11 +185,11 @@ class TSCAN(nn.Module):
         
         diff_input = inputs[:, :3, :, :]
         raw_input = inputs[:, 3:, :, :]
-        # diff_input = inputs[:,:,3:,:,:]
-        # raw_input = inputs[:,:,3:,:,:]
-        # N, D, C, H, W = raw_input.shape
-        # diff_input = self.fusion_stem(diff_input)
-        # raw_input = raw_input.view(N*D, C, H, W)
+
+        #w. fusion_stem (set the input as standardized data)
+        # N, D, C, H, W = inputs.shape
+        # diff_input = self.fusion_stem(inputs)
+        # raw_input = inputs.view(N*D, C, H, W)
 
         diff_input = self.TSM_1(diff_input)
         d1 = torch.tanh(self.motion_conv1(diff_input))

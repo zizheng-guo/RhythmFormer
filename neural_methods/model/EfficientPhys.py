@@ -173,7 +173,7 @@ class EfficientPhys(nn.Module):
         inputs = torch.diff(inputs, dim=0)
         inputs = self.batch_norm(inputs)
 
-        # inputs = inputs[:,:,3:,:,:]
+        #w. fusion_stem (set the input as standardized data)
         # inputs = self.fusion_stem(inputs)
 
         network_input = self.TSM_1(inputs)
