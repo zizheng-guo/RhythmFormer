@@ -110,15 +110,8 @@ class MultiHeadedSelfAttention_TDC_gra_sharp(nn.Module):
         q, k, v = (split_last(x, (self.n_heads, -1)).transpose(1, 2) for x in [q, k, v])
         # (B, H, S, W) @ (B, H, W, S) -> (B, H, S, S) -softmax-> (B, H, S, S)
         scores = q @ k.transpose(-2, -1) / gra_sharp
-
-        use_DropKey = 1
-        mask_ratio = 0.3
-        if use_DropKey == True:
-            m_r = torch.ones_like(scores) * mask_ratio
-            scores = scores + torch.bernoulli(m_r) * -1e12
-
-        scores = self.drop(F.softmax(scores, dim=-1))
         
+        scores = self.drop(F.softmax(scores, dim=-1))
         # (B, H, S, S) @ (B, H, S, W) -> (B, H, S, W) -trans-> (B, S, H, W)
         h = (scores @ v).transpose(1, 2).contiguous()
         # -merge-> (B, S, D)
