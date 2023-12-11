@@ -9,7 +9,7 @@ STEP 1: `bash setup.sh`
 
 STEP 2: `conda activate rppg-toolbox` 
 
-STEP 3: `conda install --yes --file requirements.txt` 
+STEP 3: `pip install -r ./requirements.txt` 
 
 ## :computer: Example of Using Pre-trained Models 
 
