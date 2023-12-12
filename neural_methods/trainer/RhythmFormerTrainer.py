@@ -188,18 +188,18 @@ class RhythmFormerTrainer(BaseTrainer):
         labels_aug = np.zeros((N, D))
         for idx in range(N):
             gt_hr_fft, _  = calculate_hr(labels[idx], labels[idx] , diff_flag = self.diff_flag , fs=self.config.VALID.DATA.FS)
-            p1 = random.random()
-            p2 = random.random()
-            p3 = random.randint(0, D//2-1)
-            if p1 < 0.5 :
+            rand1 = random.random()
+            rand2 = random.random()
+            rand3 = random.randint(0, D//2-1)
+            if rand1 < 0.5 :
                 if gt_hr_fft > 90 :
-                    for tt in range(p3,p3+D):
+                    for tt in range(rand3,rand3+D):
                         if tt%2 == 0:
-                            data_aug[idx,tt-p3,:,:,:] = data[idx,tt//2,:,:,:]
-                            labels_aug[idx,tt-p3] = labels[idx,tt//2]                    
+                            data_aug[idx,tt-rand3,:,:,:] = data[idx,tt//2,:,:,:]
+                            labels_aug[idx,tt-rand3] = labels[idx,tt//2]                    
                         else:
-                            data_aug[idx,tt-p3,:,:,:] = data[idx,tt//2,:,:,:]/2 + data[idx,tt//2+1,:,:,:]/2
-                            labels_aug[idx,tt-p3] = labels[idx,tt//2]/2 + labels[idx,tt//2+1]/2
+                            data_aug[idx,tt-rand3,:,:,:] = data[idx,tt//2,:,:,:]/2 + data[idx,tt//2+1,:,:,:]/2
+                            labels_aug[idx,tt-rand3] = labels[idx,tt//2]/2 + labels[idx,tt//2+1]/2
                 elif gt_hr_fft < 75 :
                     for tt in range(D):
                         if tt < D/2 :
@@ -216,8 +216,8 @@ class RhythmFormerTrainer(BaseTrainer):
                 labels_aug[idx] = labels[idx]
         data_aug = torch.tensor(data_aug).float()
         labels_aug = torch.tensor(labels_aug).float()
-        # if p2 < 0.5:
-        #     data_aug = torch.flip(data_aug, dims=[4])
+        if rand2 < 0.5:
+            data_aug = torch.flip(data_aug, dims=[4])
         data = data_aug
         labels = labels_aug
         return data,labels

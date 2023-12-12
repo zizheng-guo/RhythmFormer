@@ -186,7 +186,7 @@ class TSCAN(nn.Module):
         diff_input = inputs[:, :3, :, :]
         raw_input = inputs[:, 3:, :, :]
 
-        #w. fusion_stem (set the input as standardized data)
+        # w. fusion_stem (set the input as standardized data in config file)
         # N, D, C, H, W = inputs.shape
         # diff_input = self.fusion_stem(inputs)
         # raw_input = inputs.view(N*D, C, H, W)

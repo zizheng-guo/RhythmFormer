@@ -147,29 +147,28 @@ class PhysFormerTrainer(BaseTrainer):
         self.model = self.model.to(self.config.DEVICE)
         self.model.eval()
         with torch.no_grad():
-            for testtime in range(1):
-                predictions = dict()
-                labels = dict()
-                for _, test_batch in enumerate(data_loader['test']):
-                    batch_size = test_batch[0].shape[0]
-                    chunk_len = self.chunk_len
-                    data_test, labels_test = test_batch[0], test_batch[1].to(self.config.DEVICE)
-                    N, D, C, H, W = data_test.shape 
-                    data_new = torch.tensor(data_test).float().to(self.config.DEVICE)
-                    pred_ppg_test,s1,s2,s3 = self.model(data_new,gra_sharp=2.0)
-                    pred_ppg_test = (pred_ppg_test-torch.mean(pred_ppg_test, axis=-1).view(-1, 1))/torch.std(pred_ppg_test, axis=-1).view(-1, 1)    # normalize
-                    labels_test = labels_test.view(-1, 1)
-                    pred_ppg_test = pred_ppg_test.view( -1 , 1)  #4,160
-                    for idx in range(batch_size):
-                        subj_index = test_batch[2][idx]
-                        sort_index = int(test_batch[3][idx])
-                        if subj_index not in predictions.keys():
-                            predictions[subj_index] = dict()
-                            labels[subj_index] = dict()
-                        predictions[subj_index][sort_index] = pred_ppg_test[idx * chunk_len:(idx + 1) * chunk_len]
-                        labels[subj_index][sort_index] = labels_test[idx * chunk_len:(idx + 1) * chunk_len]
-                print(' ')
-                calculate_metrics(predictions, labels, self.config)
+            predictions = dict()
+            labels = dict()
+            for _, test_batch in enumerate(data_loader['test']):
+                batch_size = test_batch[0].shape[0]
+                chunk_len = self.chunk_len
+                data_test, labels_test = test_batch[0], test_batch[1].to(self.config.DEVICE)
+                N, D, C, H, W = data_test.shape 
+                data_new = torch.tensor(data_test).float().to(self.config.DEVICE)
+                pred_ppg_test,s1,s2,s3 = self.model(data_new,gra_sharp=2.0)
+                pred_ppg_test = (pred_ppg_test-torch.mean(pred_ppg_test, axis=-1).view(-1, 1))/torch.std(pred_ppg_test, axis=-1).view(-1, 1)    # normalize
+                labels_test = labels_test.view(-1, 1)
+                pred_ppg_test = pred_ppg_test.view( -1 , 1)  #4,160
+                for idx in range(batch_size):
+                    subj_index = test_batch[2][idx]
+                    sort_index = int(test_batch[3][idx])
+                    if subj_index not in predictions.keys():
+                        predictions[subj_index] = dict()
+                        labels[subj_index] = dict()
+                    predictions[subj_index][sort_index] = pred_ppg_test[idx * chunk_len:(idx + 1) * chunk_len]
+                    labels[subj_index][sort_index] = labels_test[idx * chunk_len:(idx + 1) * chunk_len]
+            print(' ')
+            calculate_metrics(predictions, labels, self.config)
 
     def save_model(self, index):
         if not os.path.exists(self.model_dir):
@@ -185,18 +184,18 @@ class PhysFormerTrainer(BaseTrainer):
         labels_aug = np.zeros((N, D))
         for idx in range(N):
             gt_hr_fft, _  = calculate_hr(labels[idx], labels[idx] , diff_flag = self.diff_flag , fs=self.config.VALID.DATA.FS)
-            p1 = random.random()
-            p2 = random.random()
-            p3 = random.randint(0, D//2-1)
-            if p1 < 0.5 :
+            rand1 = random.random()
+            rand2 = random.random()
+            rand3 = random.randint(0, D//2-1)
+            if rand1 < 0.5 :
                 if gt_hr_fft > 90 :
-                    for tt in range(p3,p3+D):
+                    for tt in range(rand3,rand3+D):
                         if tt%2 == 0:
-                            data_aug[idx,tt-p3,:,:,:] = data[idx,tt//2,:,:,:]
-                            labels_aug[idx,tt-p3] = labels[idx,tt//2]                    
+                            data_aug[idx,tt-rand3,:,:,:] = data[idx,tt//2,:,:,:]
+                            labels_aug[idx,tt-rand3] = labels[idx,tt//2]                    
                         else:
-                            data_aug[idx,tt-p3,:,:,:] = data[idx,tt//2,:,:,:]/2 + data[idx,tt//2+1,:,:,:]/2
-                            labels_aug[idx,tt-p3] = labels[idx,tt//2]/2 + labels[idx,tt//2+1]/2
+                            data_aug[idx,tt-rand3,:,:,:] = data[idx,tt//2,:,:,:]/2 + data[idx,tt//2+1,:,:,:]/2
+                            labels_aug[idx,tt-rand3] = labels[idx,tt//2]/2 + labels[idx,tt//2+1]/2
                 elif gt_hr_fft < 75 :
                     for tt in range(D):
                         if tt < D/2 :
@@ -213,7 +212,7 @@ class PhysFormerTrainer(BaseTrainer):
                 labels_aug[idx] = labels[idx]
         data_aug = torch.tensor(data_aug).float()
         labels_aug = torch.tensor(labels_aug).float()
-        if p2 < 0.5:
+        if rand2 < 0.5:
             data_aug = torch.flip(data_aug, dims=[4])
         data = data_aug
         labels = labels_aug

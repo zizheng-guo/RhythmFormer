@@ -178,7 +178,7 @@ class ViT_ST_ST_Compact3_TDC_gra_sharp(nn.Module):
         x = self.Stem0(x)
         x = self.Stem1(x)
 
-        #w. fusion_stem (set the input as standardized data)
+        # w. fusion_stem (set the input as standardized data in config file)
         # N, D, C, H, W = x.shape
         # x = self.fusion_stem(x) # output [N*D 64 32 32]
         # x = x.view(N,D,64,H//4,W//4).permute(0,2,1,3,4)
