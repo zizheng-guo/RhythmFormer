@@ -1,6 +1,4 @@
 # RhythmFormer
-The codes are based on [rPPG-toolbox](https://github.com/ubicomplab/rPPG-Toolbox)
-
 ![framework](./figures/framework.jpg)
 
 ## :wrench: Setup
@@ -10,6 +8,8 @@ STEP 1: `bash setup.sh`
 STEP 2: `conda activate rppg-toolbox` 
 
 STEP 3: `pip install -r ./requirements.txt` 
+
+The codes are based on [rPPG-toolbox](https://github.com/ubicomplab/rPPG-Toolbox)
 
 ## :computer: Example of Using Pre-trained Models 
 
@@ -35,7 +35,7 @@ STEP 1: Download the PURE raw data by asking the [paper authors](https://www.tu-
 
 STEP 2: Download the UBFC-rPPG raw data via [link](https://sites.google.com/view/ybenezeth/ubfcrppg)
 
-STEP 3: Modify `./configs/train_configs/cross/23PURE_UBFC-rPPG_RHYTHMFORMER.yaml` 
+STEP 3: Modify `./configs/train_configs/cross/PURE_UBFC-rPPG_RHYTHMFORMER.yaml` 
 
-STEP 4: Run `python main.py --config_file ./configs/train_configs/cross/23PURE_UBFC-rPPG_RHYTHMFORMER.yaml` 
+STEP 4: Run `python main.py --config_file ./configs/train_configs/cross/PURE_UBFC-rPPG_RHYTHMFORMER.yaml` 
 
