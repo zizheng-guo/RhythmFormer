@@ -5,13 +5,11 @@ import torch
 import torch.optim as optim
 import random
 from tqdm import tqdm
-
 from evaluation.post_process import calculate_hr
 from evaluation.metrics import calculate_metrics
 from neural_methods.model.RhythmFormer import RhythmFormer
 from neural_methods.trainer.BaseTrainer import BaseTrainer
 from neural_methods.loss.TorchLossComputer import RhythmFormer_Loss
-# from thop import profile,clever_format
 
 class RhythmFormerTrainer(BaseTrainer):
 
@@ -121,6 +119,7 @@ class RhythmFormerTrainer(BaseTrainer):
                     vbar.set_postfix(loss=loss.item())
         return np.mean(np.asarray(valid_loss))
 
+
     def test(self, data_loader):
         """ Model evaluation on the testing dataset."""
         if data_loader["test"] is None:
@@ -155,10 +154,8 @@ class RhythmFormerTrainer(BaseTrainer):
             for _, test_batch in enumerate(data_loader['test']):
                 batch_size = test_batch[0].shape[0]
                 chunk_len = self.chunk_len
-                data_test, labels_test = test_batch[0], test_batch[1].to(self.config.DEVICE)
-                N, D, C, H, W = data_test.shape 
-                data_new = torch.tensor(data_test).float().to(self.config.DEVICE)
-                pred_ppg_test = self.model(data_new)
+                data_test, labels_test = test_batch[0].to(self.config.DEVICE), test_batch[1].to(self.config.DEVICE)
+                pred_ppg_test = self.model(data_test)
                 pred_ppg_test = (pred_ppg_test-torch.mean(pred_ppg_test, axis=-1).view(-1, 1))/torch.std(pred_ppg_test, axis=-1).view(-1, 1)    # normalize
                 labels_test = labels_test.view(-1, 1)
                 pred_ppg_test = pred_ppg_test.view( -1 , 1)
@@ -172,6 +169,7 @@ class RhythmFormerTrainer(BaseTrainer):
                     labels[subj_index][sort_index] = labels_test[ib * chunk_len:(ib + 1) * chunk_len]
             print(' ')
             calculate_metrics(predictions, labels, self.config)
+
 
     def save_model(self, index):
         if not os.path.exists(self.model_dir):

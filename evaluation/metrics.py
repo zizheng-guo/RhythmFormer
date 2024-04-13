@@ -144,17 +144,6 @@ def calculate_metrics(predictions, labels, config):
                     show_legend=True, figure_size=(5, 5),
                     the_title=f'{filename_id}_FFT_BlandAltman_DifferencePlot',
                     file_name=f'{filename_id}_FFT_BlandAltman_DifferencePlot.pdf')
-            # elif "Stat" in metric:
-            #     total_gt = [0,0,0,0,0,0,0,0,0,0,0,0]
-            #     total_pred = [0,0,0,0,0,0,0,0,0,0,0,0]
-            #     print(gt_hr_fft_all)
-            #     print(predict_hr_fft_all)
-            #     for i in gt_hr_fft_all:
-            #         total_gt[int(i) // 10 - 4] = total_gt[int(i) // 10 - 4] + 1
-            #     for i in predict_hr_fft_all:
-            #         total_pred[int(i) // 10 - 4] = total_pred[int(i) // 10 - 4] + 1
-            #     print(total_gt)
-            #     print(total_pred)
             else:
                 raise ValueError("Wrong Test Metric Type")
     elif config.INFERENCE.EVALUATION_METHOD == "peak detection":

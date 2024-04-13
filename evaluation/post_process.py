@@ -1,13 +1,11 @@
 """The post processing files for caluclating heart rate using FFT or peak detection.
 The file also  includes helper funcs such as detrend, mag2db etc.
 """
-
 import numpy as np
 import scipy
 import scipy.io
-from scipy.signal import butter
+from scipy.signal import butter, welch
 from scipy.sparse import spdiags
-from scipy.signal import welch
 
 def get_hr(y, sr=30, min=45, max=150):
     p, q = welch(y, sr, nfft=1e5/sr, nperseg=np.min((len(y)-1, 256)))

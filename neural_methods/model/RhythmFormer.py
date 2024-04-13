@@ -7,7 +7,6 @@ from torch import nn
 from torch.nn import functional as F
 import math
 from typing import Tuple, Union
-from fairscale.nn.checkpoint import checkpoint_wrapper
 from timm.models.layers import trunc_normal_
 from neural_methods.model.base.video_bra import video_BiFormerBlock
 
@@ -107,9 +106,9 @@ class TPT_Block(nn.Module):
     def forward(self, x:torch.Tensor):
         """Definition of TPT_Block.
         Args:
-          x [N,D,C,H,W]
+          x [N,C,D,H,W]
         Returns:
-          x [N,D,C,H,W]
+          x [N,C,D,H,W]
         """
         for i in range(self.layer_n) :
             x = self.downsample_layers[i](x)
@@ -161,8 +160,6 @@ class RhythmFormer(nn.Module):
                                drop_path=dp_rates[sum(depth[:i]):sum(depth[:i+1])],
                                t_patch=t_patchs[i], topk=topks[i], side_dwconv=side_dwconv
                                )
-            if i in use_checkpoint_stages:
-                stage = checkpoint_wrapper(stage)
             self.stages.append(stage)
         ##########################################################################
 
