@@ -49,7 +49,7 @@ STEP 4: Run `python main.py --config_file ./configs/train_configs/cross/PURE_UBF
 
 - [ ] Computational Cost: Code
 
-- [ ] COHFACE: code + pretrained checkpoints
+- [x] COHFACE: code + pretrained checkpoints
 
 - [ ] VIPL-HR: code+ pretrained checkpoints
 

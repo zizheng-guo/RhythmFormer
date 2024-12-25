@@ -22,6 +22,7 @@ import numpy as np
 import pandas as pd
 from torch.utils.data import Dataset
 from tqdm import tqdm
+from scipy.interpolate import interp1d
 
 
 class BaseLoader(Dataset):
@@ -585,3 +586,13 @@ class BaseLoader(Dataset):
             np.linspace(
                 1, input_signal.shape[0], target_length), np.linspace(
                 1, input_signal.shape[0], input_signal.shape[0]), input_signal)
+
+   @staticmethod
+    def resample_video(input_frames, target_length):
+        T, H, W, C = input_frames.shape
+        channel_data = input_frames.reshape(T, -1)
+        f = interp1d(np.arange(T), channel_data, kind='cubic', axis=0)
+        resample_data = f(np.linspace(0, T-1, target_length, endpoint=False))
+        resample_data = resample_data.reshape(target_length, H, W, C)
+        resample_data = np.clip(resample_data, 0, 255).astype(np.uint8)
+        return resample_data
