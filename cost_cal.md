@@ -10,7 +10,7 @@ STEP 2: Run ```python cost_cal.py```
 
 ### 👀 Result：
 
-![image-20250110184249802](figures/cost.png)
+![image](figures/cost_cal.png)
 
 NOTE 1: The test is conducted as a **30-second inference** (900 frames), and the results are reported as the average per frame. (160) indicates a 160-frame inference test.
 
